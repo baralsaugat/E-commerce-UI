@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Footer from "./partials/Footer";
 import Header from "./partials/Header";
-import "./defaultlayout.css";
+import "./defaultlayout.style.css";
 
 const Defaultlayout = ({ children }) => {
   return (
