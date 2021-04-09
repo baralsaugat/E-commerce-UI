@@ -1,26 +1,19 @@
 import React, { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
-import "./loginForm.style.css";
+import "./passwordResetForm.style.css";
 
-const initialstate = {
-  email: "",
-  password: "",
-};
-export const LoginForm = () => {
-  const [login, setLogin] = useState(initialstate);
+export const PasswordResetForm = () => {
+  const [email, setEmail] = useState("");
 
   const handleOnChange = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
-    setLogin({
-      ...login,
-      [name]: value,
-    });
+    setEmail(value);
   };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    console.log(login);
+    console.log(email);
   };
   return (
     <div className="login-form">
@@ -33,19 +26,7 @@ export const LoginForm = () => {
               type="email"
               onChange={handleOnChange}
               placeholder="Enter email"
-              value={login.email}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              name="password"
-              type="password"
-              value={login.password}
-              placeholder="Password"
-              onChange={handleOnChange}
+              value={email}
               required
             />
           </Form.Group>
@@ -55,9 +36,9 @@ export const LoginForm = () => {
           </Button>
         </Form>
 
-        <a href="/reset-password" className="text-password">
+        <a href="/" className="text-danger">
           {" "}
-          Forgot Password ?{" "}
+          Login Now{" "}
         </a>
       </Card>
     </div>

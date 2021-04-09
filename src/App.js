@@ -1,4 +1,5 @@
 import Login from "./pages/login/Logincomponent";
+import PasswordReset from "./pages/password-reset/PasswordReset";
 import { Button } from "react-bootstrap";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Dlayout from "./components/layout/Defaultlayout";
@@ -12,6 +13,9 @@ function App() {
         <Switch>
           <Route path="/dashboard">
             <Dboard />
+          </Route>
+          <Route path="/reset-password">
+            <PasswordReset />
           </Route>
 
           <Route path="/">
