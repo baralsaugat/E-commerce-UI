@@ -10,6 +10,7 @@ const Defaultlayout = ({ children }) => {
     <div className="default-layout">
       <div className="left-bar">
         <div className="admin-log p-2 mb-5">Admin Panel</div>
+        <hr className="divider" />
         <SideBarNav />
       </div>
 
