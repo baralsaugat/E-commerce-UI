@@ -25,3 +25,14 @@ export const getCategories = () => {
     }
   });
 };
+export const deleteCategories = (idArg) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.delete(catApi, { data: idArg });
+
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
