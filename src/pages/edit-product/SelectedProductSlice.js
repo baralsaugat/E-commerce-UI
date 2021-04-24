@@ -26,6 +26,11 @@ const selectedProductSlice = createSlice({
       state.loading = false;
     },
 
+    updateProductSuccess: (state, { payload }) => {
+      state.product = payload || {};
+      state.loading = false;
+    },
+
     requestFail: (state, { payload }) => {
       state.loading = false;
       state.status = payload.status;
@@ -45,6 +50,7 @@ export const {
   requestFail,
   requestPending,
   fetchProductSuccess,
+  updateProductSuccess,
 
   // deleteCatsSuccess,
 } = actions;

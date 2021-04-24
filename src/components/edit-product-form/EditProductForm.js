@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Switch, Spinner, Alert } from "react-bootstrap";
-import { fetchAProduct } from "../../pages/edit-product/EditProductAction";
+import { Button, Form, Switch, Spinner, Alert, Image } from "react-bootstrap";
+import {
+  fetchAProduct,
+  updateAProduct,
+} from "../../pages/edit-product/EditProductAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { updateProductSuccess } from "../../pages/edit-product/SelectedProductSlice";
 
 const initialState = {
   name: "",
   qty: 0,
-  isAvailable: true,
+  status: true,
   price: 0,
   salePrice: 0,
   saleEndDate: null,
   description: "",
   categories: [],
   images: [],
+  imageToRemove
 };
 export const EditProductForm = () => {
   const dispatch = useDispatch();
   const { _id } = useParams();
   const [editProduct, setEditProduct] = useState(initialState);
 
-  const { isLoading, status, message, product } = useSelector(
+  const [images, setImages] = useState(initialState);
+
+  const { isLoading, status, message, product, result } = useSelector(
     (state) => state.selectedProduct
   );
 
@@ -36,7 +43,7 @@ export const EditProductForm = () => {
     const { name, value, checked } = e.target;
 
     let val = value;
-    if (name === "isAvailable") {
+    if (name === "status") {
       val = checked;
     }
 
@@ -48,7 +55,69 @@ export const EditProductForm = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
+
+    // ///////////
+
+    const formData = new FormData();
+
+    Object.keys(editProduct).map((key) => {
+      key !== "images" && formData.append(key, editProduct[key]);
+    });
+
+    images.length &&
+      [...images].map((image) => {
+        formData.append("images", image);
+      });
+
+    imgToDelete.length && formData.append("imgToDelete", imgToDelete)
+  
+
+    dispatch(updateProductSuccess(formData));
   };
+
+  const onImageDeleteSelect = (e) => {
+    const { checked, value } = e.target;
+		if (checked) {
+			//PUT _ID IN SIDE THE ARRAY
+			setImgToDelete({
+				...imgToDelete,
+				categories: [...imgToDelete, value],
+			});
+		} else {
+			//take _id out of the array
+			const updatedCatIds = ImgToDelete.categories.filter(id => id !== value);
+
+			setImgToDelete({
+				...newProduct,
+				categories: updatedCatIds,
+			});
+		}
+	};
+
+    setImages(files);
+  };
+
+
+  
+	const onCatSelect = e => {
+		const { checked, value } = e.target;
+		if (checked) {
+			//PUT _ID IN SIDE THE ARRAY
+			setNewProduct({
+				...newProduct,
+				categories: [...newProduct.categories, value],
+			});
+		} else {
+			//take _id out of the array
+			const updatedCatIds = newProduct.categories.filter(id => id !== value);
+
+			setNewProduct({
+				...newProduct,
+				categories: updatedCatIds,
+			});
+		}
+	};
+
 
   return (
     <div>
@@ -77,11 +146,11 @@ export const EditProductForm = () => {
           <Form.Group>
             <Form.Label>is available</Form.Label>
             <Form.Check
-              name="isAvailable"
-              id="isAvailable"
+              name="status"
+              id="status"
               type="switch"
               label="Available"
-              value={editProduct.isAvailable}
+              value={editProduct.status}
               onChange={handleOnChange}
             ></Form.Check>
           </Form.Group>
@@ -153,31 +222,51 @@ export const EditProductForm = () => {
             />
           </Form.Group>
 
-          {/* <Form.Group>
-          <Form.Label>Select Categories</Form.Label>
-          <Form.Control
-            name="categories"
-            as="select"
-            multiple
-            required
-            defaultvalue={editProduct.categories}
-            onChange={handleOnChange}
-          >
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </Form.Control>
-        </Form.Group> */}
+          <hr />
+          <div
+            
+            className="d-flex justify-content-start"
+          ></div>
+
+          {editProduct?.image?.length &&
+            editProduct.image.map((row, i) => {
+              <div className="image-item">
+                <Image
+                  src={imgSource}
+                  width="80px"
+                  height="auto"
+                  className="m-2 p-1"
+                />
+                <Form.Check
+                  
+                  type="checkbox"
+                  defaultValue = {imgSource}
+                  checked = {imgToDelete? includes(imgSource)}
+                  
+                  onChange={onImageDeleteSelect}
+                ></Form.Check>
+              </div>;
+            })}
+          <hr />
+
+          <Form.Group>
+            <Form.File
+              name="images"
+              label="Upload image file only"
+              multiple
+              value={editProduct.images}
+              onChange={handleOnImageSelect}
+              accept="images/*"
+            />
+          </Form.Group>
 
           <Button variant="primary" type="submit" onClick={handleOnSubmit}>
-            Submit
+            Update Product
           </Button>
         </Form>
       )}
     </div>
   );
-};
+;
 
 export default EditProductForm;

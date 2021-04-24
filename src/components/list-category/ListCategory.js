@@ -1,13 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch} from "react-redux";
 
 import { removeCategories } from "../../pages/category/CategoryAction";
-// import { EditCategoryForm } from "../edit-category-form/EditCategoryForm";
+import { EditCategoryForm } from "../edit-category-form/EditCategoryForm";
 
 const ListCategory = () => {
   const dispatch = useDispatch();
   const { categoryList } = useSelector((state) => state.category);
+
+  const [showForm, setShowForm] = useState("");
 
   const handleOnDeleteClicked = (_id) => {
     if (window.confirm("Are you sure you want to delete this category")) {
@@ -22,6 +24,11 @@ const ListCategory = () => {
       dispatch(removeCategories([...idsToDelete, _id]));
     }
   };
+  const handleEdit = (_id) => {
+    
+    showForm === _id ? setShowForm("") : setShowForm(_id);
+    
+  };
 
   const topLevelcats = categoryList.filter((row) => !row.parentCat);
   const childCats = categoryList.filter((row) => row.parentCat);
@@ -34,10 +41,10 @@ const ListCategory = () => {
               <ListGroup.Item key={i}>
                 {row.name}
                 <span className="buttons" style={{ marginLeft: "5rem" }}>
-                  <Button variant="primary">Edit</Button>
+                  <Button variant="primary" onClick={() => handleEdit(row._id)}>Edit</Button>
                   <Button
                     variant="danger"
-                    onclick={() => handleOnDeleteClicked(row._id)}
+                    onClick={() => handleOnDeleteClicked(row._id)}
                   >
                     Delete
                   </Button>
@@ -50,7 +57,7 @@ const ListCategory = () => {
                       {`---> ${itm.name}`}
                       <span className="buttons " style={{ marginLeft: "5rem" }}>
                         {" "}
-                        <Button variant="primary">Edit</Button>
+                        <Button variant="primary" onClick={() => handleEdit(row._id)}>Edit</Button>
                         <Button
                           variant="danger"
                           onClick={() => handleOnDeleteClicked(itm._id)}

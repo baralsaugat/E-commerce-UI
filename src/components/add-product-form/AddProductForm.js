@@ -6,22 +6,25 @@ import { useDispatch, useSelector } from "react-redux";
 const initialState = {
   name: "",
   qty: 0,
-  isAvailable: "off",
+  status: false,
   price: 0,
   salePrice: 0,
   saleEndDate: null,
   description: "",
-  categories: [],
+  // categories: [],
   images: [],
 };
 export const AddProductForm = () => {
   const dispatch = useDispatch();
   const [newProduct, setnewProduct] = useState(initialState);
+  const [images, setImages] = useState(initialState);
 
   const { isLoading, status, message } = useSelector((state) => state.product);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+
+    console.log(status);
 
     setnewProduct({
       ...newProduct,
@@ -31,7 +34,24 @@ export const AddProductForm = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    dispatch(addNewProduct(newProduct));
+
+    const formData = new FormData();
+
+    Object.keys(newProduct).map((key) => {
+      key !== "images" && formData.append(key, newProduct[key]);
+    });
+
+    images.length &&
+      [...images].map((image) => {
+        formData.append("images", image);
+      });
+
+    dispatch(addNewProduct(formData));
+  };
+
+  const handleOnImageSelect = (e) => {
+    const { files } = e.target;
+    setImages(files);
   };
   return (
     <div>
@@ -41,7 +61,7 @@ export const AddProductForm = () => {
           {message}
         </Alert>
       )}
-      <Form>
+      <Form onSubmit={handleOnSubmit} encType>
         <Form.Group>
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -57,11 +77,11 @@ export const AddProductForm = () => {
         <Form.Group>
           <Form.Label>is available</Form.Label>
           <Form.Check
-            name="isAvailable"
-            id="isAvailable"
+            name="status"
+            id="status"
             type="switch"
             label="Available"
-            value={newProduct.isAvailable}
+            value={newProduct.status}
             onChange={handleOnChange}
           ></Form.Check>
         </Form.Group>
@@ -98,15 +118,6 @@ export const AddProductForm = () => {
             onChange={handleOnChange}
           />
         </Form.Group>
-
-        {/* <Form.Group>
-          <Form.File
-            name="images"
-            label="Images"
-            value={newProduct.images}
-            onChange={handleOnChange}
-          />
-        </Form.Group> */}
 
         <Form.Group>
           <Form.Label>Quantity</Form.Label>
@@ -151,6 +162,16 @@ export const AddProductForm = () => {
           </Form.Control>
         </Form.Group> */}
 
+        <Form.Group>
+          <Form.File
+            name="images"
+            label="Upload image file only"
+            multiple
+            value={newProduct.images}
+            onChange={handleOnImageSelect}
+            accept="images/*"
+          />
+        </Form.Group>
         <Button variant="primary" type="submit" onClick={handleOnSubmit}>
           Submit
         </Button>

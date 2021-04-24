@@ -32,11 +32,12 @@ const productSlice = createSlice({
       state.message = payload.message;
     },
 
-    // deleteCatsSuccess: (state, { payload }) => {
-    //   state.status = payload.status;
-    //   state.message = payload.message;
-    //   state.loading = false;
-    // },
+    deleteProductSuccess: (state, { payload }) => {
+			state.isLoading = false;
+			state.status = payload.status;
+			state.deleteMsg = payload.message;
+		},
+
   },
 });
 const { reducer, actions } = productSlice;
@@ -46,7 +47,7 @@ export const {
   requestPending,
   fetchAllProductSuccess,
   addProductSuccess,
-  // deleteCatsSuccess,
+ deleteProductSuccess
 } = actions;
 
 export default reducer;

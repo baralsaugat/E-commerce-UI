@@ -1,14 +1,14 @@
 import {
   getProducts,
   saveProduct,
-  
-  // deleteCategories,
+  productDelete,
 } from "../../apis/productAPIs";
 import {
   requestFail,
   requestPending,
   addProductSuccess,
   fetchAllProductSuccess,
+  deleteProductSuccess,
 } from "./ProductSlice";
 
 export const addNewProduct = (frmDt) => async (dispatch) => {
@@ -43,19 +43,22 @@ export const fetchProducts = () => async (dispatch) => {
     dispatch(requestFail(err));
   }
 };
-// export const removeCategories = (idArg) => async (dispatch) => {
-//   try {
-//     dispatch(requestPending());
-//     const result = await deleteCategories(idArg);
 
-//     dispatch(deleteCatsSuccess(result));
-//     result.status === "success" && dispatch(fetchCategories());
-//   } catch (error) {
-//     const err = {
-//       status: "error",
-//       message: error.message,
-//     };
+export const deleteProduct = (_id) => async (dispatch) => {
+  try {
+    dispatch(requestPending());
 
-//     dispatch(requestFail(err));
-//   }
-// };
+    const result = await productDelete(_id); //{status, message, result:[]}
+
+    dispatch(deleteProductSuccess(result));
+
+    result.status === "success" && dispatch(fetchProducts());
+  } catch (error) {
+    const err = {
+      status: "error",
+      message: error.message,
+    };
+
+    dispatch(requestFail(err));
+  }
+};

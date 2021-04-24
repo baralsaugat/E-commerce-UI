@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Table, Spinner, Alert, Button } from "react-bootstrap";
-import { fetchProducts } from "../../pages/products/ProductAction";
+import { Table, Spinner, Alert, Button, Image } from "react-bootstrap";
+import {
+  fetchProducts,
+  deleteProduct,
+} from "../../pages/products/ProductAction";
 
 const ProductTable = () => {
   const history = useHistory();
@@ -13,6 +16,10 @@ const ProductTable = () => {
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  const handleOnDelete = (_id) => {
+    dispatch(deleteProduct(_id));
+  };
 
   return (
     <div>
@@ -26,21 +33,29 @@ const ProductTable = () => {
         <thead>
           <tr>
             <th>#</th>
+            <th>Status</th>
             <th>Thumbnail</th>
             <th>Name</th>
-            <th>Status</th>
             <th>Price</th>
-            <th>Date</th>
-            <th></th>
-            <th></th>
+            <th>Edit</th>
+
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
           {productList?.map((row, i) => (
             <tr key={row._id}>
               <td>{i}</td>
-              <td>{row.status}</td>
-              <td>put img her</td>
+              <td>
+                {row.status ? (
+                  <i class="fas fa-check-circle text-success"></i>
+                ) : (
+                  <i class="fas fa-times text-danger"></i>
+                )}
+              </td>
+              <td>
+                <Image src={row.images} width="80px" height="auto"></Image>
+              </td>
               <td>{row.name}</td>
               <td>{row.price}</td>
               <td>
@@ -54,7 +69,12 @@ const ProductTable = () => {
                 </Button>
               </td>
               <td>
-                <Button variant="success">Delete</Button>
+                <Button
+                  variant="success"
+                  onClick={() => handleOnDelete(row._id)}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}

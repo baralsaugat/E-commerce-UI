@@ -6,7 +6,11 @@ const prodApi = rootUrl + "product";
 export const saveProduct = (frmDt) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { data } = await axios.post(prodApi, frmDt);
+      const { data } = await axios.post(prodApi, frmDt, {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      });
 
       resolve(data);
     } catch (error) {
@@ -36,10 +40,21 @@ export const getAProduct = (_id) => {
     }
   });
 };
-export const fetchProducts = () => {
+export const updateProduct = (frmDt) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { data } = await axios.get(prodApi);
+      const { data } = await axios.put(prodApi, frmDt);
+      console.log(data);
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+export const productDelete = (_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.delete(prodApi, { data: { _id } });
 
       resolve(data);
     } catch (error) {
@@ -47,14 +62,3 @@ export const fetchProducts = () => {
     }
   });
 };
-// export const deleteCategories = (idArg) => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       const { data } = await axios.delete(catApi, { data: idArg });
-
-//       resolve(data);
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-// };
