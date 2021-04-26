@@ -5,6 +5,9 @@ const initialState = {
   status: "",
   message: "",
   categoryList: [],
+  show: false,
+  selectedCategory: {},
+  updateResponse:{}
 };
 
 const categorySlice = createSlice({
@@ -37,6 +40,19 @@ const categorySlice = createSlice({
       state.message = payload.message;
       state.loading = false;
     },
+    updateCategorySuccess: (state, { payload }) => {
+      state.updateResponse = payload.;
+    
+      state.loading = false;
+    },
+    toggleCategoryEditModal: (state, ) => {
+      state.show = !state.show;
+      if (state.show)
+    },
+
+    selectACategory: (state, {payload})=> {
+state.payload
+    }
   },
 });
 const { reducer, actions } = categorySlice;
@@ -46,7 +62,8 @@ export const {
   requestPending,
   fetchAllCategorySuccess,
   addCategorySuccess,
-  deleteCatsSuccess
+  deleteCatsSuccess,
+  toggleCategoryEditModal
 } = actions;
 
 export default reducer;

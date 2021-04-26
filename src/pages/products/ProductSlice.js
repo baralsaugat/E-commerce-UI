@@ -5,6 +5,7 @@ const initialState = {
   status: "",
   message: "",
   productList: [],
+  show: true,
 };
 
 const productSlice = createSlice({
@@ -33,11 +34,12 @@ const productSlice = createSlice({
     },
 
     deleteProductSuccess: (state, { payload }) => {
-			state.isLoading = false;
-			state.status = payload.status;
-			state.deleteMsg = payload.message;
-		},
+      state.isLoading = false;
+      state.status = payload.status;
+      state.deleteMsg = payload.message;
+    },
 
+   
   },
 });
 const { reducer, actions } = productSlice;
@@ -47,7 +49,8 @@ export const {
   requestPending,
   fetchAllProductSuccess,
   addProductSuccess,
- deleteProductSuccess
+  deleteProductSuccess,
+  toggleCategoryEditModal,
 } = actions;
 
 export default reducer;

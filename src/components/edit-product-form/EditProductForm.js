@@ -267,6 +267,6 @@ export const EditProductForm = () => {
       )}
     </div>
   );
-;
+
 
 export default EditProductForm;

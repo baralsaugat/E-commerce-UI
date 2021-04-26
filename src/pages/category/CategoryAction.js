@@ -1,10 +1,15 @@
-import { getCategories, saveCategory, deleteCategories } from "../../apis/categoriesAPIs";
+import {
+  getCategories,
+  saveCategory,
+  deleteCategories,
+} from "../../apis/categoriesAPIs";
 import {
   requestFail,
   requestPending,
   fetchAllCategorySuccess,
   addCategorySuccess,
   deleteCatsSuccess,
+  updateCategorySuccess,
 } from "./CategorySlice";
 
 export const addNewCategory = (frmDt) => async (dispatch) => {
@@ -45,6 +50,22 @@ export const removeCategories = (idArg) => async (dispatch) => {
     const result = await deleteCategories(idArg);
 
     dispatch(deleteCatsSuccess(result));
+    result.status === "success" && dispatch(fetchCategories());
+  } catch (error) {
+    const err = {
+      status: "error",
+      message: error.message,
+    };
+
+    dispatch(requestFail(err));
+  }
+};
+export const categoryUpdate = (idArg) => async (dispatch) => {
+  try {
+    dispatch(requestPending());
+    const result = await updateCategory(idArg);
+
+    dispatch(updateCategorySuccess(result));
     result.status === "success" && dispatch(fetchCategories());
   } catch (error) {
     const err = {
